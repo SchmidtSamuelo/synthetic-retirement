@@ -10,7 +10,7 @@ In addition, this will also attempt to backtest the 'accuracy' of the '7% rule' 
 
 ## Data
 
-The data is taken from [**Robert Shiller's Stock market data from Irrational Exuberance -- Princeton University Press 2000, Broadway Books 2001, 2nd ed., 2005**](http://www.econ.yale.edu/~shiller/data.htm).
+The data is taken from [**Robert Shiller's Stock market data from Irrational Exuberance -- Princeton University Press 2000, Broadway Books 2001, 2nd ed., 2005**](http://www.econ.yale.edu/~shiller/data.htm). This data is a monthly simulated S&P 500 history that starts in January 1871 and is still being updated with new stock market data as of July 2021. Currently, there are over 1800 different 30-year retirement windows that can be backtested with this data.
 
 ## Future decisions
 
