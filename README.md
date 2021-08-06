@@ -6,7 +6,7 @@ While the Trinity Study is referenced consistently in the FIRE and general finan
 
 Other withdrawal strategies will also be explored.
 
-In addition, this will also attempt to backtest the success of the '7% rule' which is used to project investment returns.
+In addition, this will also attempt to backtest the 'accuracy' of the '7% rule' which is used to project investment returns.
 
 ## Data
 
