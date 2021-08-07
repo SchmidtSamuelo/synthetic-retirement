@@ -17,10 +17,10 @@ class OrganizedCleanedMarketData {
   reorganizeJson() {
     const organizedMarketData: OrganizedMarketData = {};
 
-    this.originalMarketData.forEach((monthData: OriginalMonthMarketData) => {
+    this.originalMarketData.forEach((monthData) => {
       monthData.Date = formattedDate(monthData.Date.toString());
     });
-    this.originalMarketData.map((monthData: OriginalMonthMarketData) => {
+    this.originalMarketData.map((monthData) => {
       organizedMarketData[monthData.Date] = formatData(monthData);
     }); // make date the key
 
