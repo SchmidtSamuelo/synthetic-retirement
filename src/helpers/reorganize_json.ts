@@ -11,9 +11,7 @@ class OrganizedCleanedMarketData {
 
   constructor(originalMarketData: OriginalMonthMarketData[]) {
     // filter out trailing or leading rows without a Date
-    this.originalMarketData = originalMarketData.filter((monthData: OriginalMonthMarketData) => {
-      Boolean(monthData.Date); // get rid of falsy month data
-    });
+    this.originalMarketData = originalMarketData.filter((monthData) => monthData.Date);
   }
 
   reorganizeJson() {

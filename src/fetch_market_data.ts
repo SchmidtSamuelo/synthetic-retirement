@@ -1,4 +1,4 @@
-import excelToJson = require('convert-excel-to-json');
+import excelToJson from 'convert-excel-to-json';
 // const fs = require('fs');
 // const data = require('./data/data');
 import { defaultColumnMap } from './data/column_map';
@@ -31,7 +31,7 @@ const marketData = excelToJson({
 });
 
 const organizedMarketData = new OrganizedCleanedMarketData(marketData.Data);
-console.log(organizedMarketData.reorganizeJson()['187101']);
+console.log(Object.keys(organizedMarketData.reorganizeJson()));
 
 // console.log(organizedMarketData)
 
