@@ -1,41 +1,41 @@
+/* eslint-disable no-restricted-syntax */
 import excelToJson from 'convert-excel-to-json';
-// const fs = require('fs');
-// const data = require('./data/data');
+import fs from 'fs';
 import { defaultColumnMap } from './data/column_map';
 import OrganizedCleanedMarketData from './helpers/reorganize_json';
-// const fileLocation = 'http://www.econ.yale.edu/~shiller/data/ie_data.xls'
-const fileLocation = './files/excel/ie_data.xls';
 
-let headerRows = 1;
-let columnMap = {};
+// const data = require('./data/data');
+const excelFilePath = './files/excel/ie_data.xls';
+const organizedMarketDataPath = './files/json/monthlyMarketData.json';
 
-// If we are collecting the file from yale
-if (fileLocation.slice(4) === 'http') {
-  console.log('Downloading file');
+const headerRows = 8;
+const columnMap = defaultColumnMap;
+let organizedMarketData;
 
-// else grab local file
-} else {
-  console.log('Grabbing local file');
-  headerRows = 8;
-  columnMap = defaultColumnMap;
+// If we don't have the .json data file
+// ToDo: Figure out how to download the excel file from the URL
+// Axios and http.get don't seem to be working for some reason
+if (!fs.existsSync(organizedMarketDataPath)) {
+  // convert excel to JSON
+  const rawData = excelToJson({
+    sourceFile: excelFilePath,
+    header: {
+      rows: headerRows, // file from yale has 8 header rows for some reason.
+    },
+    columnToKey: columnMap,
+    sheets: ['Data'], // stock data, other sheets are charts/disclaimers
+  });
+
+  // write data to .json file. no overwrite
+  organizedMarketData = new OrganizedCleanedMarketData(rawData.Data).reorganizeJson();
+  console.log(Object.keys(organizedMarketData));
+  fs.writeFileSync(organizedMarketDataPath, JSON.stringify(organizedMarketData), { flag: 'wx' });
 }
 
-// convert excel to JSON
-const marketData = excelToJson({
-  sourceFile: fileLocation,
-  header: {
-    rows: headerRows, // file from yale has 8 header rows for some reason.
-  },
-  columnToKey: columnMap,
-  sheets: ['Data'], // stock data, other sheets are charts/disclaimers
-});
+const rawMarketData = fs.readFileSync(organizedMarketDataPath, 'utf-8');
+const marketData = JSON.parse(rawMarketData);
 
-const organizedMarketData = new OrganizedCleanedMarketData(marketData.Data);
-console.log(Object.keys(organizedMarketData.reorganizeJson()));
-
-// console.log(organizedMarketData)
-
-// write data to .json file
-// fs.writeFile('')
-
-console.log('data');
+// eslint-disable-next-line guard-for-in
+for (const o in marketData) {
+  console.log(marketData[o]);
+}
