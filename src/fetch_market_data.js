@@ -1,7 +1,5 @@
 // ToDo: Convert to Typescript
 const excelToJson = require('convert-excel-to-json');
-// const fs = require('fs');
-// const data = require('./data/data');
 const ColumnMap = require('./data/column_map');
 const OrganizedMarketData = require('./helpers/reorganize_json');
 // const fileLocation = 'http://www.econ.yale.edu/~shiller/data/ie_data.xls'
