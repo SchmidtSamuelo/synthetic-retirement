@@ -1,9 +1,15 @@
 {
+  "name": "synthetic-retirement",
+  "version": "0.0.1",
+  "scripts": {
+    "fetch": "tsc -p . && node build/fetch_market_data.js"
+  },
   "dependencies": {
     "convert-excel-to-json": "^1.7.0",
     "jslint": "^0.12.1"
   },
   "devDependencies": {
+    "@types/convert-excel-to-json": "^1.7.1",
     "@typescript-eslint/eslint-plugin": "^4.29.0",
     "@typescript-eslint/parser": "^4.29.0",
     "eslint": "^7.32.0",

@@ -4,7 +4,7 @@
 *  into one auto-named property.
 *  ToDo: Convert to interface with Typescript conversion
 */
-const defaultColumnMap = {
+export const defaultColumnMap = {
   A: 'Date',
   B: 'INXClosingPrice',
   C: 'YearlyInterpolatedDividends',
@@ -29,8 +29,8 @@ const defaultColumnMap = {
   V: 'Real10YearExcessAnnualizedReturns',
 };
 
-// hardcoded for local testing in case I am manipulating files.
-const manuallyManipulatedColumnMap = {
+// hardcoded for local testing in case I am manipulating excel files.
+export const manuallyManipulatedColumnMap = {
   A: 'INXClosingPrice',
   B: 'YearlyInterpolatedDividends',
   C: 'Earnings',
@@ -48,9 +48,4 @@ const manuallyManipulatedColumnMap = {
   O: '10YearAnnualizedStockRealReturn',
   P: '10YearAnnualizedBondRealReturn',
   Q: 'Real10YearExcessAnnualizedReturns',
-};
-
-module.exports = {
-  defaultColumnMap,
-  manuallyManipulatedColumnMap,
 };
