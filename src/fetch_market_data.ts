@@ -1,41 +1,83 @@
 /* eslint-disable no-restricted-syntax */
 import excelToJson from 'convert-excel-to-json';
 import fs from 'fs';
+import axios from 'axios';
 import { defaultColumnMap } from './data/column_map';
 import OrganizedCleanedMarketData from './helpers/reorganize_json';
 
-// const data = require('./data/data');
+const excelUrl = 'http://www.econ.yale.edu/~shiller/data/ie_data.xls';
+// const excelUrl = 'https://file-examples-com.github.io/uploads/2017/02/file_example_XLS_10.xls';
 const excelFilePath = './files/excel/ie_data.xls';
 const organizedMarketDataPath = './files/json/monthlyMarketData.json';
 
-const headerRows = 8;
-const columnMap = defaultColumnMap;
-let organizedMarketData;
+async function fetchData(): Promise<any> {
+  const filestream = fs.createWriteStream(excelFilePath);
 
-// If we don't have the .json data file
-// ToDo: Figure out how to download the excel file from the URL
-// Axios and http.get don't seem to be working for some reason
-if (!fs.existsSync(organizedMarketDataPath)) {
+  // if the excel file doesn't exist
+  // holy shit this is ugly... Someone please tell me how to do it correctly
+  return axios({
+    method: 'get',
+    url: excelUrl,
+    responseType: 'stream',
+  })
+    .then((response) => new Promise((resolve) => {
+      response.data.pipe(filestream);
+      let error: boolean = false;
+      filestream.on('error', (err) => {
+        error = Boolean(err);
+        filestream.close();
+        throw err;
+      });
+      filestream.on('close', () => {
+        if (!error) {
+          resolve(true);
+        }
+      });
+    }))
+    .catch((error) => {
+      throw error;
+    });
+}
+
+function buildWriteManipulatedMarketDataJson() {
   // convert excel to JSON
   const rawData = excelToJson({
     sourceFile: excelFilePath,
     header: {
-      rows: headerRows, // file from yale has 8 header rows for some reason.
+      rows: 8, // file from yale has 8 header rows for some reason
     },
-    columnToKey: columnMap,
+    columnToKey: defaultColumnMap,
     sheets: ['Data'], // stock data, other sheets are charts/disclaimers
   });
-
-  // write data to .json file. no overwrite
-  organizedMarketData = new OrganizedCleanedMarketData(rawData.Data).reorganizeJson();
-  console.log(Object.keys(organizedMarketData));
+  // write data to .json file no overwrite
+  const organizedMarketData = new OrganizedCleanedMarketData(rawData.Data).reorganizeJson();
   fs.writeFileSync(organizedMarketDataPath, JSON.stringify(organizedMarketData), { flag: 'wx' });
+  return organizedMarketData;
 }
 
-const rawMarketData = fs.readFileSync(organizedMarketDataPath, 'utf-8');
-const marketData = JSON.parse(rawMarketData);
+async function fetchWriteManipulateMarketData() {
+  // If we don't have the .json data file we need to build it
+  if (!fs.existsSync(organizedMarketDataPath)) {
+    // If we also don't have the .xls file fetch it
+    if (!fs.existsSync(excelFilePath)) {
+      await fetchData();
+    }
+    buildWriteManipulatedMarketDataJson();
+  }
 
-// eslint-disable-next-line guard-for-in
-for (const o in marketData) {
-  console.log(marketData[o]);
+  const rawMarketData = fs.readFileSync(organizedMarketDataPath, 'utf-8');
+  const marketData = JSON.parse(rawMarketData);
+
+  return marketData;
 }
+
+const marketData = fetchWriteManipulateMarketData();
+console.log(marketData);
+
+// exports.marketData = async (req: any, res: any) => {
+//   const marketData = await fetchWriteManipulateMarketData();
+//   console.log(marketData);
+//   res.json(marketData);
+// };
+
+export { fetchWriteManipulateMarketData as default };
