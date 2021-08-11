@@ -9,6 +9,8 @@ lerna-debug.log*
 # downloaded excel files. manipulated json is included, so users should be forced to manually delete that before the excel will re-download
 files/excel/*.xls
 files/untracked
+files/json/*.json
+!files/json/monthlyMarketData.json
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
