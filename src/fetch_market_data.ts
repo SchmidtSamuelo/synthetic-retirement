@@ -9,7 +9,7 @@ import OrganizedCleanedMarketData from './helpers/reorganize_json';
 const excelUrl = 'http://www.econ.yale.edu/~shiller/data/ie_data.xls';
 // const excelUrl = 'https://file-examples-com.github.io/uploads/2017/02/file_example_XLS_10.xls';
 const excelFilePath = './files/excel/ie_data.xls';
-const organizedMarketDataPath = './files/json/monthlyMarketData.json';
+export const organizedMarketDataPath = './files/json/monthlyMarketData.json';
 
 async function fetchData(): Promise<any> {
   const filestream = fs.createWriteStream(excelFilePath);
@@ -66,7 +66,7 @@ function buildWriteManipulatedMarketDataJson() {
   return organizedMarketData;
 }
 
-async function fetchOrWriteManipulatedMarketData(): Promise<OrganizedMarketData> {
+export async function fetchOrWriteManipulatedMarketData(): Promise<OrganizedMarketData> {
   // If we don't have the .json data file we need to build it
   if (!fs.existsSync(organizedMarketDataPath)) {
     // If we also don't have the .xls file fetch it
@@ -78,16 +78,13 @@ async function fetchOrWriteManipulatedMarketData(): Promise<OrganizedMarketData>
 
   const rawMarketData = fs.readFileSync(organizedMarketDataPath, 'utf-8');
   const marketData: OrganizedMarketData = JSON.parse(rawMarketData);
-  console.log(marketData['187102']);
 
   return marketData;
 }
 
 async function runScript(): Promise<void> {
   const marketData = await fetchOrWriteManipulatedMarketData();
-  console.log(marketData['187101']);
+  // console.log(marketData['187101']);
 }
 
 runScript();
-
-export default fetchOrWriteManipulatedMarketData;
