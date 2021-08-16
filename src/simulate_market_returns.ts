@@ -49,34 +49,39 @@ function backtestMonthlySavingsRate(
   const organizedMarketData: OrganizedMarketData = JSON.parse(
     fs.readFileSync(organizedMarketDataPath, 'utf-8'),
   );
-  const endingBalances: number[][] = [];
-  const { lastSimulationKey, startKeys } =
+  const rollingMonthlyBalances: any[][] = [];
+  const endingBalances: { month: string; balance: number }[] = [];
+  const { lastSimulationKey, keys, numStartKeys } =
     getSimulationStopConditions(simulationLength);
   let currentBalance = startingPortfolioBalance;
 
   // Loop through all simulation windows.
-  for (let i = 0; i < startKeys.length; i += 1) {
+  for (let i = 0; i < numStartKeys; i += 1) {
     const windowMonthEndingBalances = [];
     // Simulate deposits for window starting with startKey[i]
     for (let j = 0; j < simulationLength; j += 1) {
-      console.log(startKeys[i + j]);
       // double check we are not going to overflow
-      if (startKeys[i + j] === lastSimulationKey) {
+      if (keys[i + j] === lastSimulationKey) {
         break;
       }
       // continue with simulation
       const monthEndingBalance = getMonthEndingBalance(
-        organizedMarketData[startKeys[i + j]],
+        organizedMarketData[keys[i + j]],
         currentBalance,
         deposit,
       );
       windowMonthEndingBalances.push(monthEndingBalance);
+      currentBalance =
+        windowMonthEndingBalances[windowMonthEndingBalances.length - 1];
     }
-    currentBalance =
-      windowMonthEndingBalances[windowMonthEndingBalances.length];
-    endingBalances.push(windowMonthEndingBalances);
+    rollingMonthlyBalances.push([keys[i], ...windowMonthEndingBalances]);
+    endingBalances.push({ month: keys[i], balance: currentBalance });
+    currentBalance = startingPortfolioBalance;
   }
+  endingBalances.sort((a, b) => (a.balance > b.balance ? 1 : -1));
+  const averageEndingBalance = getAverageEndingBalance(endingBalances);
   console.log(endingBalances);
+  console.log(averageEndingBalance);
 }
 
 function getMonthEndingBalance(
@@ -88,8 +93,13 @@ function getMonthEndingBalance(
   return (currentBalance + depositAmount) * monthReturn;
 }
 
-async function runScript() {
-  const endingBalances = backtestMonthlySavingsRate(1000, 0, 360);
-  console.log(endingBalances);
+function getAverageEndingBalance(
+  endingBalances: { month: string; balance: number }[],
+) {
+  const endingBalancesSum = endingBalances
+    .map((month) => month.balance)
+    .reduce((accumulator, balance) => accumulator + balance);
+  return endingBalancesSum / endingBalances.length;
 }
-runScript();
+
+backtestMonthlySavingsRate(1000, 0, 360);
