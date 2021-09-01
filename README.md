@@ -2,11 +2,11 @@
 
 Synthetic retirement is an extrapolation of the extremely popular [**Trinity Study**](https://en.wikipedia.org/wiki/Trinity_study) paper that was published in 1998.
 
-While the Trinity Study is referenced consistently in the FIRE and general financial community, the datapoints for retirement can be improved upon specifically by simulating more 30-year subsets of retirement. More specifically, on a month-to-month basis instead of on a year-to-year basis. This adjustment results in 12x more retirement timeframes to backtest.
+While the Trinity Study is referenced consistently in the FIRE and general financial community, the datapoints for retirement can be improved upon by simulating more 30-year subsets of retirement. More specifically, on a month-to-month basis instead of on a year-to-year basis. This adjustment results in 12x more retirement timeframes to backtest.
 
-Other withdrawal strategies will also be explored.
+Other withdrawal strategies such as variable and more conservative fixed withdrawal rates will also be explored.
 
-In addition, this will also attempt to backtest the 'accuracy' of the '7% rule' which is used to project investment returns.
+In addition, this will also attempt to backtest the accuracy of the '7% rule' which is used to project investment returns (doneish, ~7.02% average).
 
 ## Instructions to replicate or run this locally
 Clone this repository
@@ -22,3 +22,5 @@ The data is taken from [**Robert Shiller's Stock market data from Irrational Exu
 ## Future decisions
 
 A fork of this repository will likely be made to house a python/jupyter notebook version for use with future Machine Learning applications.
+
+Why did I decide to start with Node/Typescript instead of Python? Good question.
