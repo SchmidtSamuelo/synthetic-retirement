@@ -2,7 +2,8 @@
   "name": "synthetic-retirement",
   "version": "0.0.1",
   "scripts": {
-    "fetch_data": "tsc -p . && node build/fetch_market_data.js"
+    "fetch_data": "tsc -p . && node build/fetch_market_data.js",
+    "savings_sim": "node build/simulate_market_returns.js"
   },
   "dependencies": {
     "axios": "^0.21.1",

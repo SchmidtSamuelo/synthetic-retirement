@@ -8,6 +8,8 @@ module.exports = {
     'plugin:import/typescript',
     'plugin:import/errors',
     'plugin:import/warnings',
+    // 'plugin:prettier/recommended',
+    // 'plugin:prettier/@typescript-eslint',
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -25,6 +27,8 @@ module.exports = {
     'array-callback-return': 'off',
     extensions: 'off',
     'import/extensions': 0,
+    'operator-linebreak': 0,
+    'implicit-arrow-linebreak': 0,
   },
   settings: {
     'import/resolver': {
